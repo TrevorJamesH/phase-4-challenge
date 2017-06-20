@@ -1,12 +1,12 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 // const database = require('./database')
 const app = express()
 const path = require('path')
 
-require('pug')
-app.set('view engine', 'pug');
-
+app.set('view engine', 'ejs');
+app.use(cookieParser());
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }))
 
