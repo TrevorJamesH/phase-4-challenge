@@ -1,5 +1,5 @@
 const Knex = require('knex')
-const knex = Knex(require('./knexfile.js')
+const knex = Knex(require('./knexfile.js'))
 
 
 const getAllAlbums = () => {
@@ -8,6 +8,17 @@ const getAllAlbums = () => {
   .returning('*')
 }
 
+const signup = (name, password) => {
+  console.log('signup querey',name,password)
+  return knex('users')
+  .insert({
+    name: name,
+    password: password
+  }, '*')
+}
+
+
 module.exports = {
-  getAllAlbums
+  getAllAlbums,
+  signup
 }
