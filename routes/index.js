@@ -1,15 +1,43 @@
 const express = require('express')
 const router = express.Router()
-const {signup, getAllAlbums} = require('../db/db')
+const {signup, getAllAlbums, getUsername, login} = require('../db/db')
 
 module.exports = function(app) {
 
   router.get('/', (req, res) => {
-    res.render('landing')
+    if( req.cookies.user_id ){
+      getUsername( req.cookies.user_id )
+      .then( user => {
+        res.render('index',{
+          login: true,
+          user: user
+        })
+      })
+    } else {
+      res.render('index',{
+        login: false,
+      })
+    }
   })
 
-  router.get('/signup', (req, res) => {
-    res.render('signup')
+  router.get('/login', (req, res) => {
+    res.render('login')
+  })
+
+  router.post('/login', (req, res) => {
+    login( req.body.name, req.body.password )
+    .then( response => {
+      if( response.login ){
+        res.cookie('user_id', response.id )
+        res.redirect('/')
+      }
+    })
+  })
+
+  router.get('/logout', (req, res) => {
+    res.clearCookie('user_id')
+    console.log('logout')
+    res.redirect('/')
   })
 
   router.post('/signup', (req, res) => {
@@ -17,7 +45,7 @@ module.exports = function(app) {
     signup(req.body.name, req.body.password)
     .then( response => {
       console.log('signup res', response)
-      res.cookie('user_id', response[0].id, { maxAge: (100000), httpOnly: false })
+      res.cookie('user_id', response[0].id)
       res.redirect('/albums')
     })
   })

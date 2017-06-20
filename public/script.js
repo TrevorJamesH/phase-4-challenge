@@ -1,13 +1,11 @@
 console.log('hello from the browser JavaScript')
 
 function login(){
-  console.log('clicked login')
-
+  window.location ='/login'
 }
 
-function signup(){
-  console.log('clicked signup')
-  window.location = '/signup'
+function logout(){
+  window.location = '/logout'
 }
 
 function getUsername(){

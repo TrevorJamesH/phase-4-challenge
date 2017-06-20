@@ -17,8 +17,32 @@ const signup = (name, password) => {
   }, '*')
 }
 
+const getUsername = ( id ) => {
+  return knex
+  .select('name')
+  .from('users')
+  .where('id', id)
+  .then( res => res[0].name )
+}
+
+const login = ( username, password ) => {
+  return knex
+  .select('*')
+  .from('users')
+  .where('name', username)
+  .then( res => {
+    if( res[0].password === password ){
+      return { id: res[0].id, login: true }
+    } else {
+      return { login: false}
+    }
+  })
+}
+
 
 module.exports = {
   getAllAlbums,
-  signup
+  signup,
+  getUsername,
+  login
 }
