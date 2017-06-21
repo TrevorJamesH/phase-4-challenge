@@ -11,6 +11,9 @@
     <button onClick = 'logout()'>
       Logout
     </button>
+    <button onClick = 'profile(<%= user.id %>)'>
+      Profile
+    </button>
   <% } else { %>
     <button onClick = 'login()'>
       Login
@@ -19,7 +22,4 @@
       Sign Up
     </button>
   <% } %>
-  <button onClick = 'profile(<%= user.id %>)'>
-    Profile
-  </button>
 </div>

@@ -35,7 +35,7 @@ const signup = ( name, email, password ) => {
     return { success: true, user: res[0] }
   })
   .catch( () => {
-    return { success: false, message: "duplicate username or password"}
+    return { success: false, message: "duplicate username or email"}
   })
 }
 
