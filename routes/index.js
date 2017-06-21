@@ -7,11 +7,18 @@ module.exports = function(app) {
   router.get('/', (req, res) => {
     if( req.cookies.user_id ){
       getUsername( req.cookies.user_id )
-      .then( user => {
-        res.render('index',{
-          login: true,
-          user: user
-        })
+      .then( response => {
+        if( response.success ){
+          console.log('getUsername user', response.username)
+          res.render('index',{
+            login: true,
+            user: response.username
+          })
+        } else {
+          res.render('index',{
+            login: false,
+          })
+        }
       })
     } else {
       res.render('index',{
@@ -21,15 +28,21 @@ module.exports = function(app) {
   })
 
   router.get('/login', (req, res) => {
-    res.render('login')
+    res.render('login',{
+      message: 'Login with your email and password'
+    })
   })
 
   router.post('/login', (req, res) => {
-    login( req.body.name, req.body.password )
+    login( req.body.email, req.body.password )
     .then( response => {
       if( response.login ){
         res.cookie('user_id', response.id )
         res.redirect('/')
+      } else {
+        res.render('login',{
+          message: response.message
+        })
       }
     })
   })
@@ -40,13 +53,24 @@ module.exports = function(app) {
     res.redirect('/')
   })
 
+  router.get('/signup', (req, res) => {
+    res.render('signup',{
+      message: 'Create an account'
+    })
+  })
+
   router.post('/signup', (req, res) => {
-    console.log('signup req.body',req.body)
-    signup(req.body.name, req.body.password)
+    signup(req.body.name, req.body.email, req.body.password)
     .then( response => {
-      console.log('signup res', response)
-      res.cookie('user_id', response[0].id)
-      res.redirect('/albums')
+      if( response.success ){
+        console.log('signup res', response.user)
+        res.cookie('user_id', response.user.id)
+        res.redirect('/')
+      } else {
+        res.render('signup',{
+          message: response.message
+        })
+      }
     })
   })
 

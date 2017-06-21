@@ -8,6 +8,10 @@ function logout(){
   window.location = '/logout'
 }
 
+function signup(){
+  window.location = '/signup'
+}
+
 function getUsername(){
   return 'Test'
 }
