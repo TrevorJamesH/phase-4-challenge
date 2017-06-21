@@ -30,10 +30,7 @@ module.exports = function(app) {
         })
       }
     })
-
   })
-
-
 
   router.get('/login', (req, res) => {
     res.render('login',{
