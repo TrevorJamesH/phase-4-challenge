@@ -12,7 +12,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.set('views', path.join(__dirname, 'views'))
-console.log('app.js')
 
 // app.get('/', (request, response) => {
 //   database.getAlbums((error, albums) => {

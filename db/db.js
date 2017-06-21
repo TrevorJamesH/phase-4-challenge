@@ -84,7 +84,6 @@ const addReview = ( userId, albumId, review ) => {
 }
 
 const deleteReviewById = ( reviewId ) => {
-  console.log('delete querey', reviewId)
   return knex('reviews')
   .where( 'id', reviewId )
   .del()
