@@ -48,6 +48,9 @@ const login = ( email, password ) => {
       return { login: false, message:'Incorrect email or password'}
     }
   })
+  .catch( () => {
+    return { login: false, message:'Incorrect email or password'}
+  })
 }
 
 
