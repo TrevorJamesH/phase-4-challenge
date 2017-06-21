@@ -19,9 +19,14 @@ const getAlbumById = ( id ) => {
 const getReviewsByAlbumId = ( id ) => {
   return knex
   .table('reviews')
-  .select('reviews.id','reviews.text','reviews.user_id','users.name')
+  .select(
+    'reviews.id',
+    'reviews.text',
+    'reviews.user_id',
+    'users.name')
   .where('album_id', id)
   .leftJoin('users', 'reviews.user_id', 'users.id')
+  .orderBy('reviews.timeCreated', 'desc')
 }
 
 const signup = ( name, email, password ) => {
@@ -79,6 +84,7 @@ const addReview = ( userId, albumId, review ) => {
 }
 
 const deleteReviewById = ( reviewId ) => {
+  console.log('delete querey', reviewId)
   return knex('reviews')
   .where( 'id', reviewId )
   .del()
@@ -86,9 +92,33 @@ const deleteReviewById = ( reviewId ) => {
 
 const getReviewsByUser = ( userId ) => {
   return knex
-  .select('*')
+  .select(
+    'reviews.id',
+    'reviews.text',
+    'reviews.timeCreated',
+    'reviews.user_id',
+    'albums.title',
+    'albums.artist')
   .from('reviews')
   .where('user_id', userId)
+  .join('albums','reviews.album_id','albums.id')
+  .orderBy('timeCreated', 'desc')
+}
+
+const getRecentReviews = () => {
+  return knex
+  .table('reviews')
+  .select(
+    'reviews.id',
+    'reviews.text',
+    'reviews.user_id',
+    'users.name',
+    'albums.title',
+    'albums.artist')
+  .join('users', 'reviews.user_id', 'users.id')
+  .join('albums','reviews.album_id','albums.id')
+  .orderBy('reviews.timeCreated', 'desc')
+  .limit( 3 )
 }
 
 module.exports = {
@@ -100,5 +130,6 @@ module.exports = {
   getAlbumById,
   addReview,
   deleteReviewById,
-  getReviewsByUser
+  getReviewsByUser,
+  getRecentReviews
 }

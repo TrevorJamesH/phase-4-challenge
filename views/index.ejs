@@ -16,6 +16,28 @@
         <span><%= album.artist %></span>
       </div>
     <% }) %>
+    <br>
+    <h3>Recent Reviews</h3>
+    <br>
+    <% reviews.forEach(review => { %>
+
+      <br>
+      <%= review.title %> by <%= review.artist %>
+      <br>
+      <br>
+      <%= review.text %>
+
+      <% if( review.user_id === user.id ){ %>
+        <button onClick = 'deleteReview( <%= review.id %> )'>Delete</button>
+        <% } %>
+      <br>
+      reviewed by
+      <a href='/profile/<%= review.user_id %>'>
+      <%= review.name%>
+      </a>
+      <br>
+      <br>
+    <% }) %>
   </div>
 
 </body>

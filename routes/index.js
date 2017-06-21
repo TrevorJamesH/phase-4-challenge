@@ -1,34 +1,45 @@
 const express = require('express')
 const router = express.Router()
-const {signup, getAllAlbums, getUser, login, getAlbumById, getReviewsByAlbumId, addReview, deleteReviewById, getReviewsByUser} = require('../db/db')
+const {
+  signup,
+  getAllAlbums,
+  getUser,
+  login,
+  getAlbumById,
+  getReviewsByAlbumId,
+  addReview,
+  deleteReviewById,
+  getReviewsByUser,
+  getRecentReviews
+} = require('../db/db')
 
 module.exports = function(app) {
 
   router.get('/', (req, res) => {
-    getAllAlbums()
-    .then( albums => {
-      if( req.cookies.user_id ){
-        getUser( req.cookies.user_id )
-        .then( response => {
-          if( response.success ){
-            res.render('index',{
-              login: true,
-              user: response.user,
-              albums: albums,
-            })
-          } else {
-            res.render('index',{
-              login: false,
-              albums: albums,
-            })
-          }
-        })
-      } else {
-        res.render('index',{
-          login: false,
-          albums: albums,
-        })
-      }
+    getRecentReviews()
+    .then( reviews => {
+      getAllAlbums()
+      .then( albums => {
+        if( req.cookies.user_id ){
+          getUser( req.cookies.user_id )
+          .then( response => {
+            if( response.success ){
+              res.render('index',{
+                login: true,
+                user: response.user,
+                albums: albums,
+                reviews: reviews
+              })
+            }
+          })
+        } else {
+          res.render('index',{
+            login: false,
+            albums: albums,
+            reviews: reviews
+          })
+        }
+      })
     })
   })
 
@@ -142,6 +153,7 @@ module.exports = function(app) {
   })
 
   router.get('/review/delete/:reviewId', (req, res) => {
+    console.log('delete route')
     deleteReviewById( req.params.reviewId )
     .then( () => res.redirect('back'))
   })
@@ -151,10 +163,14 @@ module.exports = function(app) {
     .then( reviews => {
       getUser( req.cookies.user_id )
       .then( response => {
-        res.render('profile',{
-          login: true,
-          user: response.user,
-          reviews: reviews
+        getUser( req.params.userId )
+        .then( viewingUser => {
+          res.render('profile',{
+            login: true,
+            user: response.user,
+            reviews: reviews,
+            viewingUser: viewingUser.user
+          })
         })
       })
     })

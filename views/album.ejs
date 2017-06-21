@@ -27,7 +27,10 @@
       <button onClick = 'deleteReview( <%= review.id %> )'>Delete</button>
       <% } %>
     <br>
-    reviewed by <%= review.name%>
+    reviewed by 
+    <a href='/profile/<%= review.user_id %>'>
+    <%= review.name%>
+    </a>
     <br>
     <br>
   <% }) %>
