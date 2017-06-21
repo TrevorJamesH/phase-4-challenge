@@ -1,31 +1,39 @@
 const express = require('express')
 const router = express.Router()
-const {signup, getAllAlbums, getUsername, login} = require('../db/db')
+const {signup, getAllAlbums, getUser, login, getAlbumById, getReviewsByAlbumId, addReview, deleteReviewById, getReviewsByUser} = require('../db/db')
 
 module.exports = function(app) {
 
   router.get('/', (req, res) => {
-    if( req.cookies.user_id ){
-      getUsername( req.cookies.user_id )
-      .then( response => {
-        if( response.success ){
-          console.log('getUsername user', response.username)
-          res.render('index',{
-            login: true,
-            user: response.username
-          })
-        } else {
-          res.render('index',{
-            login: false,
-          })
-        }
-      })
-    } else {
-      res.render('index',{
-        login: false,
-      })
-    }
+    getAllAlbums()
+    .then( albums => {
+      if( req.cookies.user_id ){
+        getUser( req.cookies.user_id )
+        .then( response => {
+          if( response.success ){
+            res.render('index',{
+              login: true,
+              user: response.user,
+              albums: albums,
+            })
+          } else {
+            res.render('index',{
+              login: false,
+              albums: albums,
+            })
+          }
+        })
+      } else {
+        res.render('index',{
+          login: false,
+          albums: albums,
+        })
+      }
+    })
+
   })
+
+
 
   router.get('/login', (req, res) => {
     res.render('login',{
@@ -49,7 +57,6 @@ module.exports = function(app) {
 
   router.get('/logout', (req, res) => {
     res.clearCookie('user_id')
-    console.log('logout')
     res.redirect('/')
   })
 
@@ -63,7 +70,6 @@ module.exports = function(app) {
     signup(req.body.name, req.body.email, req.body.password)
     .then( response => {
       if( response.success ){
-        console.log('signup res', response.user)
         res.cookie('user_id', response.user.id)
         res.redirect('/')
       } else {
@@ -74,8 +80,87 @@ module.exports = function(app) {
     })
   })
 
-  router.get('/albums', (req, res) => {
-    res.render('albums')
+  router.get('/albums/:albumId', (req, res) => {
+    const albumId = req.params.albumId
+    getAlbumById( albumId )
+    .then( album => {
+      getReviewsByAlbumId( albumId )
+      .then( reviews => {
+        getUser( req.cookies.user_id )
+        .then( response => {
+          if(response.success){
+            res.render('album',{
+              login: true,
+              user: response.user,
+              album: album,
+              reviews: reviews
+            })
+          } else {
+            res.render('album',{
+              login: false,
+              album: album,
+              reviews: reviews
+            })
+          }
+        })
+      })
+    })
+  })
+
+  router.get('/review/:albumId', (req, res) => {
+    getAlbumById( req.params.albumId )
+    .then( album => {
+      getUser( req.cookies.user_id )
+      .then( response => {
+        res.render('review',{
+          login: true,
+          user: response.user,
+          album: album,
+          message: 'Tell us about the album'
+        })
+      })
+    })
+  })
+
+  router.post('/review/:albumId', (req, res) => {
+    if( req.body.review.replace(/\s/g, '').length > 0 ){
+      addReview( req.cookies.user_id, req.params.albumId, req.body.review )
+      .then( review => {
+        res.redirect('/albums/'+req.params.albumId)
+      })
+    } else {
+      getAlbumById( req.params.albumId )
+      .then( album => {
+        getUser( req.cookies.user_id )
+        .then( response => {
+          res.render('review',{
+            login: true,
+            user: response.user,
+            album: album,
+            message: 'Write something first'
+          })
+        })
+      })
+    }
+  })
+
+  router.get('/review/delete/:reviewId', (req, res) => {
+    deleteReviewById( req.params.reviewId )
+    .then( () => res.redirect('back'))
+  })
+
+  router.get('/profile/:userId', (req, res) => {
+    getReviewsByUser( req.params.userId )
+    .then( reviews => {
+      getUser( req.cookies.user_id )
+      .then( response => {
+        res.render('profile',{
+          login: true,
+          user: response.user,
+          reviews: reviews
+        })
+      })
+    })
   })
 
   return router

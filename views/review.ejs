@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include header.ejs %>
+</head>
+<body>
+
+  <h1>Vinyl</h1>
+
+  <h2>Records</h2>
+  Reviewing '<%= album.title %>' by <%= album.artist %>
+
+  <div>
+    <form action='/review/<%= album.id %>' method='post'>
+      <textarea type='textbox' name='review'></textarea><br>
+      <input type='submit'></input>
+    </form>
+    <%= message %>
+  </div>
+
+</body>
+</html>

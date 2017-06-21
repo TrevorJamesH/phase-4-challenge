@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <% include header.ejs%>
   <title>Vinyl : <%= album.title %></title>
   <link rel="stylesheet" type="text/css" href="/style.css">
   <script type="text/javascript" src="/script.js"></script>
@@ -11,8 +12,25 @@
   <em>by <%= album.artist %></em>
 
   <h2>Reviews</h2>
+  <% if( login ) { %>
+    <button onClick = 'review( <%= album.id %> )'>
+      Add Review
+    </button>
+  <% } %>
+  <br>
 
-  <!-- TODO: implement album reviews -->
+  <% reviews.forEach(review => { %>
+
+    <br>
+    <%= review.text %>
+    <% if( review.user_id === user.id ){ %>
+      <button onClick = 'deleteReview( <%= review.id %> )'>Delete</button>
+      <% } %>
+    <br>
+    reviewed by <%= review.name%>
+    <br>
+    <br>
+  <% }) %>
 
 </body>
 </html>

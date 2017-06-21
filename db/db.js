@@ -8,6 +8,22 @@ const getAllAlbums = () => {
   .returning('*')
 }
 
+const getAlbumById = ( id ) => {
+  return knex
+  .table('albums')
+  .returning('*')
+  .where('id', id)
+  .then( album => album[0] )
+}
+
+const getReviewsByAlbumId = ( id ) => {
+  return knex
+  .table('reviews')
+  .select('reviews.id','reviews.text','reviews.user_id','users.name')
+  .where('album_id', id)
+  .leftJoin('users', 'reviews.user_id', 'users.id')
+}
+
 const signup = ( name, email, password ) => {
   return knex('users')
   .insert({
@@ -23,13 +39,13 @@ const signup = ( name, email, password ) => {
   })
 }
 
-const getUsername = ( id ) => {
+const getUser = ( id ) => {
   return knex
-  .select('name')
+  .select('*')
   .from('users')
   .where('id', id)
   .then( res => {
-    return { success: true, username: res[0].name }
+    return { success: true, user: res[0] }
   })
   .catch( error => {
     return { success: false, message: "incorrect user data, please relogin" }
@@ -53,10 +69,36 @@ const login = ( email, password ) => {
   })
 }
 
+const addReview = ( userId, albumId, review ) => {
+  return knex('reviews')
+  .insert({
+    user_id: userId,
+    album_id: albumId,
+    text: review
+  },'*')
+}
+
+const deleteReviewById = ( reviewId ) => {
+  return knex('reviews')
+  .where( 'id', reviewId )
+  .del()
+}
+
+const getReviewsByUser = ( userId ) => {
+  return knex
+  .select('*')
+  .from('reviews')
+  .where('user_id', userId)
+}
 
 module.exports = {
   getAllAlbums,
   signup,
-  getUsername,
-  login
+  getUser,
+  login,
+  getReviewsByAlbumId,
+  getAlbumById,
+  addReview,
+  deleteReviewById,
+  getReviewsByUser
 }
