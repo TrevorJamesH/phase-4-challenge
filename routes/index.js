@@ -75,17 +75,31 @@ module.exports = function(app) {
   })
 
   router.post('/signup', (req, res) => {
-    signup(req.body.name, req.body.email, req.body.password)
-    .then( response => {
-      if( response.success ){
-        res.cookie('user_id', response.user.id)
-        res.redirect('/profile/' + response.id)
-      } else {
-        res.render('signup',{
-          message: response.message
-        })
-      }
-    })
+    let tooShort = []
+    if( req.body.name.length < 5 ){
+      tooShort.push('username')
+    }
+    if( req.body.password.length < 5 ){
+      tooShort.push('password')
+    }
+    if( tooShort.length ){
+      message = tooShort.join(' and ') + ' too short'
+      res.render('signup',{
+        message: message
+      })
+    } else {
+      signup(req.body.name, req.body.email, req.body.password)
+      .then( response => {
+        if( response.success ){
+          res.cookie('user_id', response.user.id)
+          res.redirect('/profile/' + response.user.id)
+        } else {
+          res.render('signup',{
+            message: response.message
+          })
+        }
+      })
+    }
   })
 
   router.get('/albums/:albumId', (req, res) => {
