@@ -17,7 +17,7 @@
     <br>
     <%= review.text %>
     <% if( login && review.user_id === user.id ){ %>
-      <button onClick = 'deleteReview( <%= review.id %> )'>Delete</button>
+      <button onClick = 'deleteReview( <%= review.id %> )'>	🗑 </button>
       <% } %>
     <br>
     <br>

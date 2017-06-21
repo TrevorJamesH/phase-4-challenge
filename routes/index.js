@@ -14,7 +14,7 @@ const {
 } = require('../db/db')
 
 module.exports = function(app) {
-  
+
   router.get('/', (req, res) => {
     getRecentReviews()
     .then( reviews => {
@@ -52,9 +52,9 @@ module.exports = function(app) {
   router.post('/login', (req, res) => {
     login( req.body.email, req.body.password )
     .then( response => {
-      if( response.login ){
+      if( response.success ){
         res.cookie('user_id', response.id )
-        res.redirect('/')
+        res.redirect('/profile/' + response.id)
       } else {
         res.render('login',{
           message: response.message
@@ -79,7 +79,7 @@ module.exports = function(app) {
     .then( response => {
       if( response.success ){
         res.cookie('user_id', response.user.id)
-        res.redirect('/')
+        res.redirect('/profile/' + response.id)
       } else {
         res.render('signup',{
           message: response.message
