@@ -14,7 +14,7 @@ const {
 } = require('../db/db')
 
 module.exports = function(app) {
-
+  
   router.get('/', (req, res) => {
     getRecentReviews()
     .then( reviews => {
@@ -153,7 +153,6 @@ module.exports = function(app) {
   })
 
   router.get('/review/delete/:reviewId', (req, res) => {
-    console.log('delete route')
     deleteReviewById( req.params.reviewId )
     .then( () => res.redirect('back'))
   })
@@ -165,12 +164,20 @@ module.exports = function(app) {
       .then( response => {
         getUser( req.params.userId )
         .then( viewingUser => {
-          res.render('profile',{
-            login: true,
-            user: response.user,
-            reviews: reviews,
-            viewingUser: viewingUser.user
-          })
+          if( response.success ){
+            res.render('profile',{
+              login: true,
+              user: response.user,
+              reviews: reviews,
+              viewingUser: viewingUser.user
+            })
+          } else {
+            res.render('profile',{
+              login: false,
+              reviews: reviews,
+              viewingUser: viewingUser.user
+            })
+          }
         })
       })
     })

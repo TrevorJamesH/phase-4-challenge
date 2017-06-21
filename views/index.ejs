@@ -22,12 +22,12 @@
     <% reviews.forEach(review => { %>
 
       <br>
-      <%= review.title %> by <%= review.artist %>
+      '<%= review.title %>' by <%= review.artist %>
       <br>
       <br>
       <%= review.text %>
 
-      <% if( review.user_id === user.id ){ %>
+      <% if( login && review.user_id === user.id ){ %>
         <button onClick = 'deleteReview( <%= review.id %> )'>Delete</button>
         <% } %>
       <br>
