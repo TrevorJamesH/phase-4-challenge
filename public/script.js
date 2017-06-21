@@ -24,6 +24,7 @@ function profile( userId ){
 
 function deleteReview( reviewId ){
   if( confirm('Are you sure sure you want to delete this review?')){
+    console.log('deleting',reviewId)
     window.location = '/review/delete/' + reviewId
   }
 }

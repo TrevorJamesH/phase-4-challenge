@@ -4,17 +4,23 @@
   <% include header.ejs%>
 </head>
 <body>
-  <h1> My Reviews </h1>
+  <h2> <%= viewingUser.name%> </h2>
+  <h3> <%= viewingUser.email%> </h3>
+  <h4> Member since <%= viewingUser.timeCreated%> </h4>
+  <h3> <%= viewingUser.name%>'s Reviews: </h3>
 
   <% reviews.forEach(review => { %>
 
+    <br>
+    <%= review.title %> by <%= review.artist %>
+    <br>
     <br>
     <%= review.text %>
     <% if( review.user_id === user.id ){ %>
       <button onClick = 'deleteReview( <%= review.id %> )'>Delete</button>
       <% } %>
     <br>
-
+    <br>
     <br>
   <% }) %>
 
