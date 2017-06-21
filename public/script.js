@@ -1,7 +1,9 @@
-console.log('hello from the browser JavaScript')
+function home(){
+  window.location = '/'
+}
 
 function login(){
-  window.location ='/login'
+  window.location = '/login'
 }
 
 function logout(){
@@ -12,6 +14,16 @@ function signup(){
   window.location = '/signup'
 }
 
-function getUsername(){
-  return 'Test'
+function review( albumId ){
+  window.location = '/review/' + albumId
+}
+
+function profile( userId ){
+  window.location = '/profile/' + userId
+}
+
+function deleteReview( reviewId ){
+  if( confirm('Are you sure sure you want to delete this review?')){
+    window.location = '/review/delete/' + reviewId
+  }
 }

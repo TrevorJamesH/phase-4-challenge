@@ -1,23 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Vinyl</title>
-  <link rel="stylesheet" type="text/css" href="/style.css">
-  <script type="text/javascript" src="/script.js"></script>
-  <% if( login ) { %>
-    Logged in as
-    <%= user %>
-    <button onClick = 'logout()'>
-      Logout
-    </button>
-  <% } else { %>
-    <button onClick = 'login()'>
-      Login
-    </button>
-    <button onClick = 'signup()'>
-      Sign Up
-    </button>
-  <% } %>
+  <% include header.ejs%>
 </head>
 <body>
 
@@ -26,7 +10,6 @@
   <h2>Records</h2>
 
   <div class="album-list">
-    <% let albums=[{'title':'title','artist':'artist'}]%>
     <% albums.forEach(function(album) { %>
       <div>
         <h5><a href="/albums/<%= album.id %>"><%= album.title %></a></h5>

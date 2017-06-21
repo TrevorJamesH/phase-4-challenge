@@ -1,0 +1,25 @@
+<div>
+  <title>Vinyl</title>
+  <link rel="stylesheet" type="text/css" href="/style.css">
+  <script type="text/javascript" src="/script.js"></script>
+  <button onClick = 'home()'>
+    Home
+  </button>
+  <% if( login ) { %>
+    Logged in as
+    <%= user.name %>
+    <button onClick = 'logout()'>
+      Logout
+    </button>
+  <% } else { %>
+    <button onClick = 'login()'>
+      Login
+    </button>
+    <button onClick = 'signup()'>
+      Sign Up
+    </button>
+  <% } %>
+  <button onClick = 'profile(<%= user.id %>)'>
+    Profile
+  </button>
+</div>

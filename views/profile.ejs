@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include header.ejs%>
+</head>
+<body>
+  <h1> My Reviews </h1>
+
+  <% reviews.forEach(review => { %>
+
+    <br>
+    <%= review.text %>
+    <% if( review.user_id === user.id ){ %>
+      <button onClick = 'deleteReview( <%= review.id %> )'>Delete</button>
+      <% } %>
+    <br>
+
+    <br>
+  <% }) %>
+
+</body>
+</html>
