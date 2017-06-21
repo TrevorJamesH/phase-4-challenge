@@ -23,6 +23,7 @@ const getReviewsByAlbumId = ( id ) => {
     'reviews.id',
     'reviews.text',
     'reviews.user_id',
+    'reviews.timeCreated',
     'users.name')
   .where('album_id', id)
   .leftJoin('users', 'reviews.user_id', 'users.id')
@@ -124,6 +125,7 @@ const getRecentReviews = () => {
     'reviews.id',
     'reviews.text',
     'reviews.user_id',
+    'reviews.timeCreated',
     'users.name',
     'albums.title',
     'albums.artist')

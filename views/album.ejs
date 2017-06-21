@@ -20,7 +20,6 @@
   <br>
 
   <% reviews.forEach(review => { %>
-
     <br>
     <%= review.text %>
     <% if( login && review.user_id === user.id ){ %>
@@ -32,6 +31,7 @@
     <%= review.name%>
     </a>
     <br>
+    on <%= review.timeCreated.toString().split(' ').slice( 1, 4).join(' ') %>
     <br>
   <% }) %>
 
