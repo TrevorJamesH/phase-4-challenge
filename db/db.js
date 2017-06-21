@@ -40,7 +40,9 @@ const signup = ( name, email, password ) => {
     return { success: true, user: res[0] }
   })
   .catch( () => {
-    return { success: false, message: "duplicate username or email"}
+    return {
+      success: false,
+      message: "duplicate username or email"}
   })
 }
 
@@ -53,7 +55,9 @@ const getUser = ( id ) => {
     return { success: true, user: res[0] }
   })
   .catch( error => {
-    return { success: false, message: "incorrect user data, please relogin" }
+    return {
+      success: false,
+      message: "incorrect user data, please relogin" }
   })
 }
 
@@ -64,13 +68,22 @@ const login = ( email, password ) => {
   .where('email', email)
   .then( res => {
     if( res[0].password === password ){
-      return { id: res[0].id, login: true }
+      return {
+        success: true,
+        id: res[0].id,
+      }
     } else {
-      return { login: false, message:'Incorrect email or password'}
+      return {
+        success: false,
+        message:'Incorrect email or password'
+      }
     }
   })
   .catch( () => {
-    return { login: false, message:'Incorrect email or password'}
+    return {
+      success: false,
+      message:'Incorrect email or password'
+    }
   })
 }
 
