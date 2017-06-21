@@ -92,7 +92,7 @@ module.exports = function(app) {
       .then( response => {
         if( response.success ){
           res.cookie('user_id', response.user.id)
-          res.redirect('/profile/' + response.id)
+          res.redirect('/profile/' + response.user.id)
         } else {
           res.render('signup',{
             message: response.message
