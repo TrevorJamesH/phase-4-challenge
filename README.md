@@ -1,3 +1,5 @@
+This was a 48 hour coding challenge to test full stack proficiency within Learners Guild. It's an album review app, with sign in and reviewing capabilities.
+
 # Vinyl
 
 A community for record enthusiasts to review their favorite albums.
